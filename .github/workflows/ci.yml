@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [pull_request]
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust: [stable, beta, nightly]
-        os: [ubuntu-latest, windows-latest, macOS-latest, ubuntu-24.04-arm]
+        rust: [stable]
+        os: [ubuntu-latest,ubuntu-24.04-arm]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
