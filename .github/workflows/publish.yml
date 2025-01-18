@@ -17,6 +17,10 @@ jobs:
             binary_target: x86_64-unknown-linux-musl
           - os: ubuntu-latest
             binary_target: x86_64-unknown-linux-gnu
+          - os: ubuntu-24.04-arm
+            binary_target: aarch64-unknown-linux-musl
+          - os: ubuntu-24.04-arm
+            binary_target: aarch64-unknown-linux-gnu
           - os: windows-latest
             binary_target: x86_64-pc-windows-msvc
           - os: macos-latest
