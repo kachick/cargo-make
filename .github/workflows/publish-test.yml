@@ -1,8 +1,7 @@
-name: Publish
+name: Test build phase in publishing
 on:
-  push:
-    tags:
-      - '*'
+  pull_request:
+
 env:
   CLICOLOR_FORCE: 1
 jobs:
@@ -13,21 +12,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            binary_target: x86_64-unknown-linux-musl
-          - os: ubuntu-latest
-            binary_target: x86_64-unknown-linux-gnu
+        #   - os: ubuntu-latest
+        #     binary_target: x86_64-unknown-linux-musl
+        #   - os: ubuntu-latest
+        #     binary_target: x86_64-unknown-linux-gnu
           - os: ubuntu-24.04-arm
             binary_target: aarch64-unknown-linux-gnu
-          - os: windows-latest
-            binary_target: x86_64-pc-windows-msvc
-          - os: macos-latest
-            binary_target: x86_64-apple-darwin
-          - os: macos-latest
-            binary_target: aarch64-apple-darwin
+        #   - os: windows-latest
+        #     binary_target: x86_64-pc-windows-msvc
+        #   - os: macos-latest
+        #     binary_target: x86_64-apple-darwin
+        #   - os: macos-latest
+        #     binary_target: aarch64-apple-darwin
     steps:
     - name: Install musl tools
-      if: matrix.os == 'ubuntu-latest'
+      if: startsWith(matrix.os, 'ubuntu-')
       run: sudo apt-get install musl-tools
     - name: Checkout
       uses: actions/checkout@v2
@@ -41,11 +40,3 @@ jobs:
       with:
         command: run
         args: --bin cargo-make --target-dir target_ci -- make --env CARGO_MAKE_RELEASE_FLOW_TARGET=${{ matrix.binary_target }} zip-release-ci-flow
-    - name: Upload Binaries
-      uses: svenstaro/upload-release-action@v1-release
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: '*.zip'
-        tag: ${{ github.ref }}
-        overwrite: true
-        file_glob: true

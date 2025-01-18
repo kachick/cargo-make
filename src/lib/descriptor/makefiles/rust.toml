@@ -1036,7 +1036,7 @@ echo "*************************************"
 description = "Sets up environment variables based on target."
 category = "CI"
 private = true
-env.CARGO_MAKE_BINARY_RELEASE_ENV_ARM_LINUX = { source = "${CARGO_MAKE_RELEASE_FLOW_TARGET}", default_value = "false", mapping = { "arm-unknown-linux-gnueabihf" = "true" } }
+env.CARGO_MAKE_BINARY_RELEASE_ENV_ARM_LINUX = { source = "${CARGO_MAKE_RELEASE_FLOW_TARGET}", default_value = "false", mapping = { "arm-unknown-linux-gnueabihf" = "true", "aarch64-unknown-linux-gnu" = "true" } }
 env.CARGO_MAKE_BINARY_RELEASE_ENV_USE_CROSS = "${CARGO_MAKE_BINARY_RELEASE_ENV_ARM_LINUX}"
 env.CARGO_MAKE_BINARY_RELEASE_ENV_INSTALL_MUSL = true
 
@@ -1069,7 +1069,7 @@ script = '''
 rustup target add "${CARGO_MAKE_RELEASE_FLOW_TARGET}"
 curl --location ${CARGO_MAKE_OPENSSL_DOWNLOAD_URL} | tar xzf -
 cd openssl-${CARGO_MAKE_OPENSSL_VERSION}
-CC=musl-gcc ./Configure --prefix="${OPENSSL_DIR}" no-dso no-ssl2 no-ssl3 linux-${OPENSSL_PLATFORM} -fPIC
+CC=musl-gcc ./Configure --prefix="${OPENSSL_DIR}" no-dso no-ssl2 no-ssl3 linux-${OPENSSL_PLATFORM} -march=armv8-a -fPIC
 make -j"$(nproc)"
 make install
 '''
